@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AP2_MediaTek86.controleur;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,14 +13,23 @@ namespace AP2_MediaTek86.vue
 {
     public partial class FrmConnexion : Form
     {
-        public FrmConnexion()
+        Controle controle;
+        public FrmConnexion(Controle controle)
         {
+            this.controle = controle;
             InitializeComponent();
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void btnConnexion_Click(object sender, EventArgs e)
         {
-
+            if(txtIdentifiant.Text.Equals("") || txtPwd.Text.Equals(""))
+            {
+                MessageBox.Show("Vous devez remplir tous les champs afin de vous connecter", "Champ(s) vide(s)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                controle.Authentification(txtIdentifiant.Text, txtPwd.Text);
+            }
         }
     }
 }

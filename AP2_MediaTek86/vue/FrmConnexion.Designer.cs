@@ -30,9 +30,9 @@ namespace AP2_MediaTek86.vue
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtIdentifiant = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtPwd = new System.Windows.Forms.TextBox();
             this.btnConnexion = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -46,12 +46,12 @@ namespace AP2_MediaTek86.vue
             this.label1.TabIndex = 0;
             this.label1.Text = "Identifiant :";
             // 
-            // textBox1
+            // txtIdentifiant
             // 
-            this.textBox1.Location = new System.Drawing.Point(68, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(161, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtIdentifiant.Location = new System.Drawing.Point(68, 36);
+            this.txtIdentifiant.Name = "txtIdentifiant";
+            this.txtIdentifiant.Size = new System.Drawing.Size(161, 20);
+            this.txtIdentifiant.TabIndex = 1;
             // 
             // label2
             // 
@@ -62,14 +62,14 @@ namespace AP2_MediaTek86.vue
             this.label2.Size = new System.Drawing.Size(133, 24);
             this.label2.TabIndex = 2;
             this.label2.Text = "Mot de passe :";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
-            // textBox2
+            // txtPwd
             // 
-            this.textBox2.Location = new System.Drawing.Point(68, 96);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(161, 20);
-            this.textBox2.TabIndex = 3;
+            this.txtPwd.Location = new System.Drawing.Point(68, 96);
+            this.txtPwd.Name = "txtPwd";
+            this.txtPwd.PasswordChar = '•';
+            this.txtPwd.Size = new System.Drawing.Size(161, 20);
+            this.txtPwd.TabIndex = 3;
             // 
             // btnConnexion
             // 
@@ -79,6 +79,7 @@ namespace AP2_MediaTek86.vue
             this.btnConnexion.TabIndex = 4;
             this.btnConnexion.Text = "Connexion";
             this.btnConnexion.UseVisualStyleBackColor = true;
+            this.btnConnexion.Click += new System.EventHandler(this.btnConnexion_Click);
             // 
             // FrmConnexion
             // 
@@ -86,9 +87,9 @@ namespace AP2_MediaTek86.vue
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(288, 167);
             this.Controls.Add(this.btnConnexion);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtPwd);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtIdentifiant);
             this.Controls.Add(this.label1);
             this.Name = "FrmConnexion";
             this.Text = "FrmConnexion";
@@ -100,9 +101,9 @@ namespace AP2_MediaTek86.vue
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtIdentifiant;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtPwd;
         private System.Windows.Forms.Button btnConnexion;
     }
 }

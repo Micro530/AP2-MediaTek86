@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
-    class Motif
+    public class Motif
     {
         /// <summary>
         /// Propriétés de la table motif 

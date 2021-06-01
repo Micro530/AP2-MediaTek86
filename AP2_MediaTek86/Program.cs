@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AP2_MediaTek86.controleur;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +15,7 @@ namespace AP2_MediaTek86
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new vue.FrmAbsences());
+            new Controle();
         }
     }
 }
