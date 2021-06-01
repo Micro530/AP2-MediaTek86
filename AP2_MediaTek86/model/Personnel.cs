@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
-    class Personnel
+    public class Personnel
     {
         /// <summary>
         /// propriété de la table personnel

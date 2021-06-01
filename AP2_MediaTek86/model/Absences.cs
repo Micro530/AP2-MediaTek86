@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
-    class Absences
+    public class Absences
     {
         /// <summary>
         /// les propriétés de la table absences

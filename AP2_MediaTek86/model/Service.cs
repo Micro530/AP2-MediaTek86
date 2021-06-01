@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
-    class Service
+    public class Service
     {
         /// <summary>
         /// Propriétés de la table service 

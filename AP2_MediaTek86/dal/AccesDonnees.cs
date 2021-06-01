@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AP2_MediaTek86.connexion;
-
+using AP2_MediaTek86.model;
 
 namespace AP2_MediaTek86.dal
 {
@@ -14,36 +15,133 @@ namespace AP2_MediaTek86.dal
         /// La chaine de connexion
         /// </summary>
         private static string connectionString = "server=localhost;user id=responsable;password=motdepasse;persistsecurityinfo=True;database=mediatek86";
-        
-        
-        
-        
-        /**
-        // Récupère et retourne les développeurs provenant de la BDD
-        public static List<Developpeur> GetLesDeveloppeurs()
+        /// <summary>
+        /// Gere la requete d'authentification
+        /// </summary>
+        /// <returns>le chaine d'authentification</returns>
+        public static string Authentification()
         {
-            List<Developpeur> lesDeveloppeurs = new List<Developpeur>();
+            List<string> lesidentifiants = new List<string>();
             ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            bdd.ReqSelect("SELECT * from developpeur order by nom, prenom;", parameters);
-            if (true)
+            bdd.ReqSelect("SELECT * from responsable;", parameters);
+            if (bdd.Read())
             {
-                while (bdd.Read())
-                {
-                    lesDeveloppeurs.Add(new Developpeur(int.Parse(bdd.Field("iddeveloppeur").ToString()), bdd.Field("idprofil").ToString(), bdd.Field("nom").ToString(),
-                        bdd.Field("prenom").ToString(), bdd.Field("tel").ToString(), bdd.Field("mail").ToString(), bdd.Field("pwd").ToString()));
-
-                }
+                string identifiant = (string)bdd.Field("login") + "|" + (string)bdd.Field("pwd");
                 bdd.close();
-                return lesDeveloppeurs;
+                return identifiant;
             }
             else
             {
-                return lesDeveloppeurs;
+                bdd.close();
+                return null;
             }
-
-
         }
+        /// <summary>
+        /// Gere la récupération de la liste du personnel 
+        /// </summary>
+        /// <returns>le liste du personnel</returns>
+        public static List<Personnel> GetLesPersonnels()
+        {
+            List<Personnel> lesPersonnels = new List<Personnel>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT idpersonnel, personnel.nom as nompersonnel, prenom, tel, mail, personnel.idservice, service.nom as nomservice" +
+                " from personnel inner join service on personnel.idservice = service.idservice order by nompersonnel, prenom;", parameters);
+            while (bdd.Read())
+            {
+                lesPersonnels.Add(new Personnel((int)bdd.Field("idpersonnel"), (string)bdd.Field("nompersonnel"), (string)bdd.Field("prenom"),
+                    (string)bdd.Field("tel"), (string)bdd.Field("mail"), (int)bdd.Field("idservice"), (string)bdd.Field("nomservice")));
+}
+            bdd.close();
+            return lesPersonnels;
+        }
+        /// <summary>
+        /// gere la récupération dela liste des services
+        /// </summary>
+        /// <returns>la liste des services</returns>
+        public static List<Service> GetLesServices()
+        {
+            List<Service> lesServices = new List<Service>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT * from service order by nom;", parameters);
+            while (bdd.Read())
+            {
+                lesServices.Add(new Service((int)bdd.Field("idservice"), (string)bdd.Field("nom")));
+            }
+            bdd.close();
+            return lesServices;
+        }
+        /// <summary>
+        /// Ajoute un personnel
+        /// </summary>
+        /// <param name="unePersonne"> la personne à ajouter</param>
+        public static void AjoutPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@nom", unePersonne.Nom);
+            parameters.Add("@prenom", unePersonne.Prenom);
+            parameters.Add("@tel", unePersonne.Tel);
+            parameters.Add("@mail", unePersonne.Mail);
+            parameters.Add("@idservice",unePersonne.IdService);
+            bdd.reqUpdate("insert into personnel (nom,prenom,tel,mail,idservice) VALUES (@nom, @prenom, @tel, @mail, @idservice);", parameters);
+        }
+        /// <summary>
+        /// Ajoute une absence
+        /// </summary>
+        /// <param name="uneAbsence">l'absence à rajouter</param>
+        public static void AjoutAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            parameters.Add("@motif", uneAbsence.IdMotif);
+            parameters.Add("@datefin", uneAbsence.DateFin);
+            bdd.reqUpdate("insert into absence (idpersonnel,datedebut,motif,datefin) VALUES (@idpersonnel, @datedebut, @motif, @datefin);", parameters);
+        }
+        public static void ModifierPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", unePersonne.IdPersonnel);
+            parameters.Add("@nom", unePersonne.Nom);
+            parameters.Add("@prenom", unePersonne.Prenom);
+            parameters.Add("@tel", unePersonne.Tel);
+            parameters.Add("@mail", unePersonne.Mail);
+            parameters.Add("@idservice", unePersonne.IdService);
+            bdd.reqUpdate("update personnel set nom = @nom, prenom = @prenom, tel = @tel, mail = @mail, idservice = @idservice where idpersonnel = @idpersonnel;", parameters);
+            bdd.close();
+        }
+        public static void ModifierAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            parameters.Add("@idmotif", uneAbsence.IdMotif);
+            parameters.Add("@datefin", uneAbsence.DateFin);
+            bdd.reqUpdate("update personnel set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+            bdd.close();
+        }
+        public static void SupprimerPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", unePersonne.IdPersonnel);
+            bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel;", parameters);
+        }
+        public static void SupprimerAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+        }
+        /**
         // Récupère et retourne les profils provenant de la BDD
         public static List<Profil> GetLesProfils()
         {
@@ -70,35 +168,10 @@ namespace AP2_MediaTek86.dal
             bdd.reqUpdate("delete from developpeur where iddeveloppeur = @iddeveloppeur;", parameters);
         }
         // Ajoute un développeur
-        public static void AddDeveloppeur(Developpeur developpeur)
-        {
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-            parameters.Add("@idprofil", developpeur.Profil);
-            parameters.Add("@nom", developpeur.Nom);
-            parameters.Add("@prenom", developpeur.Prenom);
-            parameters.Add("@tel", developpeur.Tel);
-            parameters.Add("@mail", developpeur.Mail);
-            parameters.Add("@pwd", GetStringSha256Hash(developpeur.Nom));
-            bdd.reqUpdate("insert into developpeur (iddeveloppeur,idprofil,nom,prenom,tel,mail,pwd) VALUES (@iddeveloppeur, @idprofil, @nom, @prenom, @tel, @mail, @pwd);", parameters);
-
-        }
+        
 
         // Modification d'un développeur
-        public static void UpdateDeveloppeur(Developpeur developpeur)
-        {
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-            parameters.Add("@idprofil", developpeur.Profil);
-            parameters.Add("@nom", developpeur.Nom);
-            parameters.Add("@prenom", developpeur.Prenom);
-            parameters.Add("@tel", developpeur.Tel);
-            parameters.Add("@mail", developpeur.Mail);
-            bdd.reqUpdate("update developpeur set idprofil = @idprofil, nom = @nom, prenom = @prenom, tel = @tel, mail =  @mail where iddeveloppeur = @iddeveloppeur;", parameters);
-            bdd.close();
-        }
+        
         // Demande de modification du pwd
         public static void UpdatePwd(Developpeur developpeur)
         {

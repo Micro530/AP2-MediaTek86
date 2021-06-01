@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
-    class Motif
+    public class Motif
     {
         /// <summary>
         /// Propriétés de la table motif 
@@ -29,7 +29,7 @@ namespace AP2_MediaTek86.model
         /// <summary>
         /// redéfinition de la méthode ToString afin de faciliter son utilisation dans les ComboBox
         /// </summary>
-        /// <returns>retourne le libellée</returns>
+        /// <returns>retourne le libellé</returns>
         public override string ToString()
         {
             return libelle;

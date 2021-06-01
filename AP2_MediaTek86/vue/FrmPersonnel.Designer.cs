@@ -82,6 +82,7 @@ namespace AP2_MediaTek86.vue
             this.btnZ2Annuler.TabIndex = 10;
             this.btnZ2Annuler.Text = "Annuler";
             this.btnZ2Annuler.UseVisualStyleBackColor = true;
+            this.btnZ2Annuler.Click += new System.EventHandler(this.btnZ2Annuler_Click);
             // 
             // btnZ2Enregistrer
             // 
@@ -91,6 +92,7 @@ namespace AP2_MediaTek86.vue
             this.btnZ2Enregistrer.TabIndex = 4;
             this.btnZ2Enregistrer.Text = "Enregistrer";
             this.btnZ2Enregistrer.UseVisualStyleBackColor = true;
+            this.btnZ2Enregistrer.Click += new System.EventHandler(this.btnZ2Enregistrer_Click);
             // 
             // label5
             // 
@@ -186,7 +188,6 @@ namespace AP2_MediaTek86.vue
             this.zonePers.TabIndex = 5;
             this.zonePers.TabStop = false;
             this.zonePers.Text = "Le personnel";
-            this.zonePers.Enter += new System.EventHandler(this.zone1Dev_Enter);
             // 
             // btnAbsence
             // 
@@ -196,6 +197,7 @@ namespace AP2_MediaTek86.vue
             this.btnAbsence.TabIndex = 4;
             this.btnAbsence.Text = "Gestion des Absences";
             this.btnAbsence.UseVisualStyleBackColor = true;
+            this.btnAbsence.Click += new System.EventHandler(this.btnAbsence_Click);
             // 
             // btsAjouter
             // 
@@ -215,6 +217,7 @@ namespace AP2_MediaTek86.vue
             this.btnSup.TabIndex = 2;
             this.btnSup.Text = "Supprimer";
             this.btnSup.UseVisualStyleBackColor = true;
+            this.btnSup.Click += new System.EventHandler(this.btnSup_Click);
             // 
             // btnModifier
             // 
@@ -224,6 +227,7 @@ namespace AP2_MediaTek86.vue
             this.btnModifier.TabIndex = 1;
             this.btnModifier.Text = "Modifier";
             this.btnModifier.UseVisualStyleBackColor = true;
+            this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
             // 
             // dgvPersonnel
             // 
