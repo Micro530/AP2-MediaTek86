@@ -15,6 +15,9 @@ namespace AP2_MediaTek86.controleur
         private FrmPersonnel frmPersonnel;
         private FrmAbsences frmAbsences;
         private FrmConnexion frmConnexion;
+        /// <summary>
+        /// constructeur de control qui instancie le formulaire de connexion
+        /// </summary>
         public Controle()
         {
             frmConnexion = new FrmConnexion(this);
@@ -22,7 +25,7 @@ namespace AP2_MediaTek86.controleur
         }
         public List<Personnel> GetLesPersonnels()
         {
-            return null;
+            return AccesDonnees.GetLesPersonnels();
         }
         public List<Absences> GetLesAbsences(int idpersonnel)
         {
@@ -48,6 +51,11 @@ namespace AP2_MediaTek86.controleur
         {
 
         }
+        /// <summary>
+        /// récupère la chaine d'authentification de la base de données et la compare avec les informations saisies
+        /// </summary>
+        /// <param name="identifiant">l'identifiant saisie par l'utilisateur</param>
+        /// <param name="mdp">le mot de passe saisie par l'utilisateur</param>
         public void Authentification(string identifiant, string mdp)
         {
             mdp = GetStringSha256Hash(mdp);
@@ -71,6 +79,11 @@ namespace AP2_MediaTek86.controleur
         {
 
         }
+        /// <summary>
+        /// fonction permettant de hacher en 256 en chaine
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>la chaine hachée</returns>
         internal static string GetStringSha256Hash(string text)
         {
             if (string.IsNullOrEmpty(text))

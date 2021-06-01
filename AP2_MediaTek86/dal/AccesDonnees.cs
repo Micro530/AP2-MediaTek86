@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AP2_MediaTek86.connexion;
-
+using AP2_MediaTek86.model;
 
 namespace AP2_MediaTek86.dal
 {
@@ -14,7 +15,10 @@ namespace AP2_MediaTek86.dal
         /// La chaine de connexion
         /// </summary>
         private static string connectionString = "server=localhost;user id=responsable;password=motdepasse;persistsecurityinfo=True;database=mediatek86";
-
+        /// <summary>
+        /// Gere la requete d'authentification
+        /// </summary>
+        /// <returns>le chaine d'authentification</returns>
         public static string Authentification()
         {
             List<string> lesidentifiants = new List<string>();
@@ -23,41 +27,36 @@ namespace AP2_MediaTek86.dal
             bdd.ReqSelect("SELECT * from responsable;", parameters);
             if (bdd.Read())
             {
-                return bdd.Field("login").ToString()+ "|" +bdd.Field("pwd").ToString();
+                string identifiant = (string)bdd.Field("login") + "|" + (string)bdd.Field("pwd");
+                bdd.close();
+                return identifiant;
             }
             else
             {
+                bdd.close();
                 return null;
             }
         }
-
-
-            /**
-            // Récupère et retourne les développeurs provenant de la BDD
-            public static List<Developpeur> GetLesDeveloppeurs()
+        /// <summary>
+        /// Gere la récupération de la liste du personnel 
+        /// </summary>
+        /// <returns>le liste du personnel</returns>
+        public static List<Personnel> GetLesPersonnels()
+        {
+            List<Personnel> lesPersonnels = new List<Personnel>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT idpersonnel, personnel.nom as nompersonnel, prenom, tel, mail, personnel.idservice, service.nom as nomservice" +
+                " from personnel inner join service on personnel.idservice = service.idservice order by nompersonnel, prenom;", parameters);
+            while (bdd.Read())
             {
-                List<Developpeur> lesDeveloppeurs = new List<Developpeur>();
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                bdd.ReqSelect("SELECT * from developpeur order by nom, prenom;", parameters);
-                if (true)
-                {
-                    while (bdd.Read())
-                    {
-                        lesDeveloppeurs.Add(new Developpeur(int.Parse(bdd.Field("iddeveloppeur").ToString()), bdd.Field("idprofil").ToString(), bdd.Field("nom").ToString(),
-                            bdd.Field("prenom").ToString(), bdd.Field("tel").ToString(), bdd.Field("mail").ToString(), bdd.Field("pwd").ToString()));
-
-                    }
-                    bdd.close();
-                    return lesDeveloppeurs;
-                }
-                else
-                {
-                    return lesDeveloppeurs;
-                }
-
-
-            }
+                lesPersonnels.Add(new Personnel((int)bdd.Field("idpersonnel"), (string)bdd.Field("nompersonnel"), (string)bdd.Field("prenom"),
+                    (string)bdd.Field("tel"), (string)bdd.Field("mail"), (int)bdd.Field("idservice"), (string)bdd.Field("nomservice")));
+}
+            bdd.close();
+            return lesPersonnels;
+        }
+            /**
             // Récupère et retourne les profils provenant de la BDD
             public static List<Profil> GetLesProfils()
             {
