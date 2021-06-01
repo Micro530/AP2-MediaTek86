@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\AP2_MediaTek86.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -90,6 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="connexion\ConnexionBDD.cs" />
+    <Compile Include="dal\AccesDonnees.cs" />
+    <Compile Include="model\Absences.cs" />
+    <Compile Include="model\Motif.cs" />
+    <Compile Include="model\Personnel.cs" />
+    <Compile Include="model\Service.cs" />
     <Compile Include="vue\FrmAbsences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="controleur\" />
-    <Folder Include="model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
