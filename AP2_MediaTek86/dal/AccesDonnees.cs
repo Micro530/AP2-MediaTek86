@@ -24,16 +24,6 @@ namespace AP2_MediaTek86.dal
             if (bdd.Read())
             {
                 return bdd.Field("login").ToString()+ "|" +bdd.Field("pwd").ToString();
-                /**
-                while (bdd.Read())
-                {
-                    lesDeveloppeurs.Add(new Developpeur(int.Parse(bdd.Field("iddeveloppeur").ToString()), bdd.Field("idprofil").ToString(), bdd.Field("nom").ToString(),
-                        bdd.Field("prenom").ToString(), bdd.Field("tel").ToString(), bdd.Field("mail").ToString(), bdd.Field("pwd").ToString()));
-
-                }
-                bdd.close();
-                return lesDeveloppeurs;
-                **/
             }
             else
             {

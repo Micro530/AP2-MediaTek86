@@ -12,9 +12,9 @@ namespace AP2_MediaTek86.controleur
 {
     public class Controle
     {
-        FrmPersonnel frmPersonnel;
-        FrmAbsences frmAbsences;
-        FrmConnexion frmConnexion;
+        private FrmPersonnel frmPersonnel;
+        private FrmAbsences frmAbsences;
+        private FrmConnexion frmConnexion;
         public Controle()
         {
             frmConnexion = new FrmConnexion(this);
