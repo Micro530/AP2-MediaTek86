@@ -29,7 +29,7 @@ namespace AP2_MediaTek86.model
         /// <summary>
         /// redéfinition de la méthode ToString afin de faciliter son utilisation dans les ComboBox
         /// </summary>
-        /// <returns></returns>
+        /// <returns>retourne le libellé</returns>
         public override string ToString()
         {
             return libelle;
