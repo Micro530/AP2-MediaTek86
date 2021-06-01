@@ -23,34 +23,73 @@ namespace AP2_MediaTek86.controleur
             frmConnexion = new FrmConnexion(this);
             frmConnexion.ShowDialog();
         }
+        /// <summary>
+        /// recupére les données depuis AccesDonnees
+        /// </summary>
+        /// <returns>la liste du personnel</returns>
         public List<Personnel> GetLesPersonnels()
         {
             return AccesDonnees.GetLesPersonnels();
         }
+        /// <summary>
+        /// recupére les données depuis AccesDonnees
+        /// </summary>
+        /// <param name="idpersonnel">le personnel</param>
+        /// <returns>la liste des absences</returns>
         public List<Absences> GetLesAbsences(int idpersonnel)
         {
             return null;
         }
+        /// <summary>
+        /// recupére les données depuis AccesDonnees
+        /// </summary>
+        /// <returns>la liste dus motif d'absences</returns>
         public List<Motif> GetLesMotif()
         {
             return null;
         }
+        /// <summary>
+        /// recupére les données depuis AccesDonnees
+        /// </summary>
+        /// <returns>la liste des services</returns>
         public List<Service> GetLesServices()
         {
-            return null;
+            return AccesDonnees.GetLesServices();
         }
         public void Ajouter(object unObjet)
         {
-
+            if(unObjet is Personnel)
+            {
+                AccesDonnees.AjoutPersonnel((Personnel)unObjet);
+            }
+            else
+            {
+                AccesDonnees.AjoutAbsence((Absences)unObjet);
+            }
         }
         public void Modifier(object unObjet)
         {
-
+            if (unObjet is Personnel)
+            {
+                AccesDonnees.ModifierPersonnel((Personnel)unObjet);
+            }
+            else
+            {
+                AccesDonnees.ModifierAbsence((Absences)unObjet);
+            }
         }
         public void Supprimer(object unObjet)
         {
-
+            if (unObjet is Personnel)
+            {
+                AccesDonnees.AjoutPersonnel((Personnel)unObjet);
+            }
+            else
+            {
+                AccesDonnees.AjoutAbsence((Absences)unObjet);
+            }
         }
+        
         /// <summary>
         /// récupère la chaine d'authentification de la base de données et la compare avec les informations saisies
         /// </summary>
@@ -61,9 +100,9 @@ namespace AP2_MediaTek86.controleur
             mdp = GetStringSha256Hash(mdp);
             if ((identifiant + "|" + mdp).Equals(AccesDonnees.Authentification()))
             {
+                frmConnexion.Hide();
                 frmPersonnel = new FrmPersonnel(this);
                 frmPersonnel.ShowDialog();
-                frmConnexion.Hide();
             }
             else
             {

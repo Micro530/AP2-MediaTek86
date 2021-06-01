@@ -56,99 +56,144 @@ namespace AP2_MediaTek86.dal
             bdd.close();
             return lesPersonnels;
         }
-            /**
-            // Récupère et retourne les profils provenant de la BDD
-            public static List<Profil> GetLesProfils()
+        /// <summary>
+        /// gere la récupération dela liste des services
+        /// </summary>
+        /// <returns>la liste des services</returns>
+        public static List<Service> GetLesServices()
+        {
+            List<Service> lesServices = new List<Service>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT * from service order by nom;", parameters);
+            while (bdd.Read())
             {
-                List<Profil> lesProfils = new List<Profil>();
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                bdd.ReqSelect("SELECT * from profil order by nom;", parameters);
-                while (bdd.Read())
-                {
-                    lesProfils.Add(new Profil(int.Parse(bdd.Field("idprofil").ToString()), bdd.Field("nom").ToString()));
+                lesServices.Add(new Service((int)bdd.Field("idservice"), (string)bdd.Field("nom")));
+            }
+            bdd.close();
+            return lesServices;
+        }
+        /// <summary>
+        /// Ajoute un personnel
+        /// </summary>
+        /// <param name="unePersonne"> la personne à ajouter</param>
+        public static void AjoutPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@nom", unePersonne.Nom);
+            parameters.Add("@prenom", unePersonne.Prenom);
+            parameters.Add("@tel", unePersonne.Tel);
+            parameters.Add("@mail", unePersonne.Mail);
+            parameters.Add("@idservice",unePersonne.IdService);
+            bdd.reqUpdate("insert into personnel (nom,prenom,tel,mail,idservice) VALUES (@nom, @prenom, @tel, @mail, @idservice);", parameters);
+        }
+        /// <summary>
+        /// Ajoute une absence
+        /// </summary>
+        /// <param name="uneAbsence">l'absence à rajouter</param>
+        public static void AjoutAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            parameters.Add("@motif", uneAbsence.IdMotif);
+            parameters.Add("@datefin", uneAbsence.DateFin);
+            bdd.reqUpdate("insert into absence (idpersonnel,datedebut,motif,datefin) VALUES (@idpersonnel, @datedebut, @motif, @datefin);", parameters);
+        }
+        public static void ModifierPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", unePersonne.IdPersonnel);
+            parameters.Add("@nom", unePersonne.Nom);
+            parameters.Add("@prenom", unePersonne.Prenom);
+            parameters.Add("@tel", unePersonne.Tel);
+            parameters.Add("@mail", unePersonne.Mail);
+            parameters.Add("@idservice", unePersonne.IdService);
+            bdd.reqUpdate("update personnel set nom = @nom, prenom = @prenom, tel = @tel, mail = @mail, idservice = @idservice where idpersonnel = @idpersonnel;", parameters);
+            bdd.close();
+        }
+        public static void ModifierAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            parameters.Add("@idmotif", uneAbsence.IdMotif);
+            parameters.Add("@datefin", uneAbsence.DateFin);
+            bdd.reqUpdate("update personnel set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+            bdd.close();
+        }
+        /**
+        // Récupère et retourne les profils provenant de la BDD
+        public static List<Profil> GetLesProfils()
+        {
+            List<Profil> lesProfils = new List<Profil>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT * from profil order by nom;", parameters);
+            while (bdd.Read())
+            {
+                lesProfils.Add(new Profil(int.Parse(bdd.Field("idprofil").ToString()), bdd.Field("nom").ToString()));
 
-                }
-                bdd.close();
-                return lesProfils;
+            }
+            bdd.close();
+            return lesProfils;
 
 
-            }
-            // Suppression d'un développeur
-            public static void DelDepveloppeur(Developpeur developpeur)
-            {
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-                bdd.reqUpdate("delete from developpeur where iddeveloppeur = @iddeveloppeur;", parameters);
-            }
-            // Ajoute un développeur
-            public static void AddDeveloppeur(Developpeur developpeur)
-            {
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-                parameters.Add("@idprofil", developpeur.Profil);
-                parameters.Add("@nom", developpeur.Nom);
-                parameters.Add("@prenom", developpeur.Prenom);
-                parameters.Add("@tel", developpeur.Tel);
-                parameters.Add("@mail", developpeur.Mail);
-                parameters.Add("@pwd", GetStringSha256Hash(developpeur.Nom));
-                bdd.reqUpdate("insert into developpeur (iddeveloppeur,idprofil,nom,prenom,tel,mail,pwd) VALUES (@iddeveloppeur, @idprofil, @nom, @prenom, @tel, @mail, @pwd);", parameters);
+        }
+        // Suppression d'un développeur
+        public static void DelDepveloppeur(Developpeur developpeur)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
+            bdd.reqUpdate("delete from developpeur where iddeveloppeur = @iddeveloppeur;", parameters);
+        }
+        // Ajoute un développeur
+        
 
-            }
+        // Modification d'un développeur
+        
+        // Demande de modification du pwd
+        public static void UpdatePwd(Developpeur developpeur)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
+            parameters.Add("@pwd", GetStringSha256Hash(developpeur.Pwd));
+            bdd.reqUpdate("update developpeur set pwd = @pwd where iddeveloppeur = @iddeveloppeur;", parameters);
+            bdd.close();
+        }
+        public static bool Authentification(String nom, String prenom, String pwd)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@nomDev", nom);
+            parameters.Add("@prenomDev", prenom);
+            parameters.Add("@pwdDev", GetStringSha256Hash(pwd));
+            bdd.ReqSelect("SELECT * from developpeur inner join profil on developpeur.idprofil = profil.idprofil " +
+                "where developpeur.nom = @nomDev and prenom = @prenomDev and pwd = @pwdDev and profil.nom = 'admin';", parameters);
+            bool temp = bdd.Read();
+            bdd.close();
+            return temp;
 
-            // Modification d'un développeur
-            public static void UpdateDeveloppeur(Developpeur developpeur)
+        }
+        /// Transformation d'une chaîne avec SHA256 (pour le pwd)
+        internal static string GetStringSha256Hash(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+            using (var sha = new System.Security.Cryptography.SHA256Managed())
             {
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-                parameters.Add("@idprofil", developpeur.Profil);
-                parameters.Add("@nom", developpeur.Nom);
-                parameters.Add("@prenom", developpeur.Prenom);
-                parameters.Add("@tel", developpeur.Tel);
-                parameters.Add("@mail", developpeur.Mail);
-                bdd.reqUpdate("update developpeur set idprofil = @idprofil, nom = @nom, prenom = @prenom, tel = @tel, mail =  @mail where iddeveloppeur = @iddeveloppeur;", parameters);
-                bdd.close();
+                byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);
+                byte[] hash = sha.ComputeHash(textData);
+                return BitConverter.ToString(hash).Replace("-", string.Empty);
             }
-            // Demande de modification du pwd
-            public static void UpdatePwd(Developpeur developpeur)
-            {
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-                parameters.Add("@pwd", GetStringSha256Hash(developpeur.Pwd));
-                bdd.reqUpdate("update developpeur set pwd = @pwd where iddeveloppeur = @iddeveloppeur;", parameters);
-                bdd.close();
-            }
-            public static bool Authentification(String nom, String prenom, String pwd)
-            {
-                ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@nomDev", nom);
-                parameters.Add("@prenomDev", prenom);
-                parameters.Add("@pwdDev", GetStringSha256Hash(pwd));
-                bdd.ReqSelect("SELECT * from developpeur inner join profil on developpeur.idprofil = profil.idprofil " +
-                    "where developpeur.nom = @nomDev and prenom = @prenomDev and pwd = @pwdDev and profil.nom = 'admin';", parameters);
-                bool temp = bdd.Read();
-                bdd.close();
-                return temp;
-
-            }
-            /// Transformation d'une chaîne avec SHA256 (pour le pwd)
-            internal static string GetStringSha256Hash(string text)
-            {
-                if (string.IsNullOrEmpty(text))
-                    return string.Empty;
-                using (var sha = new System.Security.Cryptography.SHA256Managed())
-                {
-                    byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);
-                    byte[] hash = sha.ComputeHash(textData);
-                    return BitConverter.ToString(hash).Replace("-", string.Empty);
-                }
-            }
-            **/
+        }
+        **/
     }
        
 }
