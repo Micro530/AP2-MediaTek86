@@ -55,13 +55,19 @@ namespace AP2_MediaTek86.vue
             bdsLesServices.DataSource = controle.GetLesServices();
             comboService.DataSource = bdsLesServices;
         }
+        /// <summary>
+        /// permet d'activer la zone d'ajout/modification
+        /// </summary>
+        /// <param name="txt"></param>
         private void ActiveZoneAjouter(string txt)
         {
             zoneAjout.Text = txt;
             zoneAjout.Visible = true;
             zonePers.Enabled = false;
         }
-
+        /// <summary>
+        /// permet de desectiver la zone d'aout/modification
+        /// </summary>
         private void DesactiveZoneAjouter()
         {
             txtNom.Text = "";
@@ -71,18 +77,30 @@ namespace AP2_MediaTek86.vue
             comboService.SelectedIndex = -1;
             zoneAjout.Visible = false;
             zonePers.Enabled = true;
-
         }
+        /// <summary>
+        /// évenement clic sur le bouton ajouter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btsAjouter_Click(object sender, EventArgs e)
         {
             ActiveZoneAjouter("Ajouter un membre aux personnels");
         }
-
+        /// <summary>
+        /// événement clic sur le bouton annuler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnZ2Annuler_Click(object sender, EventArgs e)
         {
             DesactiveZoneAjouter();
         }
-
+        /// <summary>
+        /// permet de valider un ajout ou une modification
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnZ2Enregistrer_Click(object sender, EventArgs e)
         {
             if (!(txtNom.Text.Equals("") || txtPrenom.Text.Equals("") || txtMail.Text.Equals("") || txtTel.Text.Equals("")) || comboService.SelectedIndex.Equals(-1))
@@ -106,10 +124,14 @@ namespace AP2_MediaTek86.vue
                 MessageBox.Show("Vous devez entrer des valeurs dans tous les champs de saisie avant de pouvoir enregistrer une nouvelle entrée", "Champ(s) vide(s)", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
+        /// <summary>
+        /// permet de lancer la procedure de modification
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
-            if(selectionDev("Vous devez selectionner un developpeur avant de pouvoir le modifier", "Aucun developpeur selectionné"))
+            if(selectionDev("Vous devez selectionner un membre du personel avant de pouvoir le modifier", "Aucun personnel selectionné"))
             {
                 ActiveZoneAjouter("Modifier un membre du personnel");
                 txtNom.Text = (string)dgvPersonnel.CurrentRow.Cells["nom"].Value;
@@ -119,6 +141,12 @@ namespace AP2_MediaTek86.vue
                 comboService.SelectedIndex = comboService.FindStringExact((string)dgvPersonnel.CurrentRow.Cells["service"].Value);
             }
         }
+        /// <summary>
+        /// permet de vérfier si une ligne st selectionné dans le DataGridView
+        /// </summary>
+        /// <param name="msg1"></param>
+        /// <param name="msg2"></param>
+        /// <returns></returns>
         private bool selectionDev(String msg1, String msg2)
         {
             if (dgvPersonnel.CurrentRow.Index.Equals(-1))
@@ -129,6 +157,28 @@ namespace AP2_MediaTek86.vue
             else
             {
                 return true;
+            }
+        }
+
+        private void btnSup_Click(object sender, EventArgs e)
+        {
+            if(selectionDev("Vous devez selectionner un membre du personel avant de pouvoir le supprimer", "Aucun personnel selectionné"))
+            {
+                Personnel unPersonnel = (Personnel)bdsLesPersonnels.List[bdsLesPersonnels.Position];
+                if (MessageBox.Show("Voulez-vous vraiment supprimer " + unPersonnel.Nom + " " + unPersonnel.Prenom + " ?", "Confirmation de suppression", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes )
+                {
+                    controle.Supprimer(unPersonnel);
+                    ResetFormulaire();
+                }
+            }
+        }
+
+        private void btnAbsence_Click(object sender, EventArgs e)
+        {
+            if (selectionDev("Vous devez selectionner un membre du personel avant de pouvoir gerer ses absences", "Aucun personnel selectionné"))
+            {
+                controle.AccesAuFrmAbsences((Personnel)bdsLesPersonnels.List[bdsLesPersonnels.Position]);
             }
         }
     }

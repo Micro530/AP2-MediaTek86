@@ -126,6 +126,21 @@ namespace AP2_MediaTek86.dal
             bdd.reqUpdate("update personnel set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
             bdd.close();
         }
+        public static void SupprimerPersonnel(Personnel unePersonne)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", unePersonne.IdPersonnel);
+            bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel;", parameters);
+        }
+        public static void SupprimerAbsence(Absences uneAbsence)
+        {
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
+            parameters.Add("@datedebut", uneAbsence.DateDebut);
+            bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+        }
         /**
         // Récupère et retourne les profils provenant de la BDD
         public static List<Profil> GetLesProfils()

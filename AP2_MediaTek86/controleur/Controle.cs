@@ -56,6 +56,10 @@ namespace AP2_MediaTek86.controleur
         {
             return AccesDonnees.GetLesServices();
         }
+        /// <summary>
+        /// envoie l'objet pour qu'il soit ajouté à la bdd
+        /// </summary>
+        /// <param name="unObjet">soit de type Personnel ou Absences</param>
         public void Ajouter(object unObjet)
         {
             if(unObjet is Personnel)
@@ -67,6 +71,10 @@ namespace AP2_MediaTek86.controleur
                 AccesDonnees.AjoutAbsence((Absences)unObjet);
             }
         }
+        /// <summary>
+        /// envoie l'objet devant^être modifié à la bdd
+        /// </summary>
+        /// <param name="unObjet">soit de type Personnel ou Absences</param>
         public void Modifier(object unObjet)
         {
             if (unObjet is Personnel)
@@ -82,11 +90,11 @@ namespace AP2_MediaTek86.controleur
         {
             if (unObjet is Personnel)
             {
-                AccesDonnees.AjoutPersonnel((Personnel)unObjet);
+                AccesDonnees.SupprimerPersonnel((Personnel)unObjet);
             }
             else
             {
-                AccesDonnees.AjoutAbsence((Absences)unObjet);
+                AccesDonnees.SupprimerAbsence((Absences)unObjet);
             }
         }
         
@@ -110,8 +118,11 @@ namespace AP2_MediaTek86.controleur
             }
             
         }
-        public void AccesAuFrmAbsences()
+        public void AccesAuFrmAbsences(Personnel unPersonnel)
         {
+            frmPersonnel.Visible = false;
+            frmAbsences = new FrmAbsences(this, unPersonnel);
+            frmAbsences.ShowDialog();
 
         }
         public void AccesAuFrmPersonnel()

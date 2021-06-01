@@ -197,6 +197,7 @@ namespace AP2_MediaTek86.vue
             this.btnAbsence.TabIndex = 4;
             this.btnAbsence.Text = "Gestion des Absences";
             this.btnAbsence.UseVisualStyleBackColor = true;
+            this.btnAbsence.Click += new System.EventHandler(this.btnAbsence_Click);
             // 
             // btsAjouter
             // 
@@ -216,6 +217,7 @@ namespace AP2_MediaTek86.vue
             this.btnSup.TabIndex = 2;
             this.btnSup.Text = "Supprimer";
             this.btnSup.UseVisualStyleBackColor = true;
+            this.btnSup.Click += new System.EventHandler(this.btnSup_Click);
             // 
             // btnModifier
             // 
