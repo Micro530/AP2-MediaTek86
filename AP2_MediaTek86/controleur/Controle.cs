@@ -36,9 +36,9 @@ namespace AP2_MediaTek86.controleur
         /// </summary>
         /// <param name="idpersonnel">le personnel</param>
         /// <returns>la liste des absences</returns>
-        public List<Absences> GetLesAbsences(int idpersonnel)
+        public List<Absences> GetLesAbsences(Personnel unPersonnel)
         {
-            return null;
+            return AccesDonnees.GetLesAbsences(unPersonnel);
         }
         /// <summary>
         /// recupére les données depuis AccesDonnees
@@ -46,7 +46,7 @@ namespace AP2_MediaTek86.controleur
         /// <returns>la liste dus motif d'absences</returns>
         public List<Motif> GetLesMotif()
         {
-            return null;
+            return AccesDonnees.GetLesMotif();
         }
         /// <summary>
         /// recupére les données depuis AccesDonnees
@@ -127,7 +127,8 @@ namespace AP2_MediaTek86.controleur
         }
         public void AccesAuFrmPersonnel()
         {
-
+            frmAbsences.Dispose();
+            frmPersonnel.Visible = true;
         }
         /// <summary>
         /// fonction permettant de hacher en 256 en chaine

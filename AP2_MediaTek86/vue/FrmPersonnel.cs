@@ -131,7 +131,7 @@ namespace AP2_MediaTek86.vue
         /// <param name="e"></param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
-            if(selectionDev("Vous devez selectionner un membre du personel avant de pouvoir le modifier", "Aucun personnel selectionné"))
+            if(selectionDgv("Vous devez selectionner un membre du personel avant de pouvoir le modifier", "Aucun personnel selectionné"))
             {
                 ActiveZoneAjouter("Modifier un membre du personnel");
                 txtNom.Text = (string)dgvPersonnel.CurrentRow.Cells["nom"].Value;
@@ -147,9 +147,9 @@ namespace AP2_MediaTek86.vue
         /// <param name="msg1"></param>
         /// <param name="msg2"></param>
         /// <returns></returns>
-        private bool selectionDev(String msg1, String msg2)
+        private bool selectionDgv(String msg1, String msg2)
         {
-            if (dgvPersonnel.CurrentRow.Index.Equals(-1))
+            if (dgvPersonnel.CurrentRow is null || dgvPersonnel.CurrentRow.Index.Equals(-1))
             {
                 MessageBox.Show(msg1, msg2, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
@@ -162,7 +162,7 @@ namespace AP2_MediaTek86.vue
 
         private void btnSup_Click(object sender, EventArgs e)
         {
-            if(selectionDev("Vous devez selectionner un membre du personel avant de pouvoir le supprimer", "Aucun personnel selectionné"))
+            if(selectionDgv("Vous devez selectionner un membre du personel avant de pouvoir le supprimer", "Aucun personnel selectionné"))
             {
                 Personnel unPersonnel = (Personnel)bdsLesPersonnels.List[bdsLesPersonnels.Position];
                 if (MessageBox.Show("Voulez-vous vraiment supprimer " + unPersonnel.Nom + " " + unPersonnel.Prenom + " ?", "Confirmation de suppression", 
@@ -176,7 +176,7 @@ namespace AP2_MediaTek86.vue
 
         private void btnAbsence_Click(object sender, EventArgs e)
         {
-            if (selectionDev("Vous devez selectionner un membre du personel avant de pouvoir gerer ses absences", "Aucun personnel selectionné"))
+            if (selectionDgv("Vous devez selectionner un membre du personel avant de pouvoir gerer ses absences", "Aucun personnel selectionné"))
             {
                 controle.AccesAuFrmAbsences((Personnel)bdsLesPersonnels.List[bdsLesPersonnels.Position]);
             }
