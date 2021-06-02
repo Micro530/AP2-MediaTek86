@@ -1,24 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AP2_MediaTek86.model
+﻿namespace AP2_MediaTek86.model
 {
     public class Personnel
     {
         /// <summary>
-        /// propriété de la table personnel
+        /// id du personnel
         /// </summary>
         private int idPersonnel;
+        /// <summary>
+        /// nom
+        /// </summary>
         private string nom;
+        /// <summary>
+        /// son prénom
+        /// </summary>
         private string prenom;
+        /// <summary>
+        /// son tel
+        /// </summary>
         private string tel;
+        /// <summary>
+        /// son email
+        /// </summary>
         private string mail;
+        /// <summary>
+        /// son id de service
+        /// </summary>
         private int idService;
+        /// <summary>
+        /// son nom de service
+        /// </summary>
         private string service;
-
+        /// <summary>
+        /// génération de l'encapsulation
+        /// </summary>
         public int IdPersonnel { get => idPersonnel; set => idPersonnel = value; }
         public string Nom { get => nom; set => nom = value; }
         public string Prenom { get => prenom; set => prenom = value; }

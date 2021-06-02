@@ -205,7 +205,7 @@ namespace AP2_MediaTek86.vue
             this.Controls.Add(this.zoneAjout);
             this.Controls.Add(this.zoneAbsence);
             this.Name = "FrmAbsences";
-            this.Text = "FrmAbsences";
+            this.Text = "Gestion des Absences";
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbsences)).EndInit();
             this.zoneAjout.ResumeLayout(false);
             this.zoneAjout.PerformLayout();

@@ -3,17 +3,23 @@ using AP2_MediaTek86.model;
 using AP2_MediaTek86.vue;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AP2_MediaTek86.controleur
 {
     public class Controle
     {
+        /// <summary>
+        /// permet de mémoriser le formulaire personnel
+        /// </summary>
         private FrmPersonnel frmPersonnel;
+        /// <summary>
+        /// permet de mémoriser le formulaire absence
+        /// </summary>
         private FrmAbsences frmAbsences;
+        /// <summary>
+        /// permet de mémoriser le formulaire connexion
+        /// </summary>
         private FrmConnexion frmConnexion;
         /// <summary>
         /// constructeur de control qui instancie le formulaire de connexion
@@ -72,7 +78,7 @@ namespace AP2_MediaTek86.controleur
             }
         }
         /// <summary>
-        /// envoie l'objet devant^être modifié à la bdd
+        /// envoie l'objet devant être modifié à la bdd
         /// </summary>
         /// <param name="unObjet">soit de type Personnel ou Absences</param>
         public void Modifier(object unObjet)
@@ -86,6 +92,10 @@ namespace AP2_MediaTek86.controleur
                 AccesDonnees.ModifierAbsence((Absences)unObjet);
             }
         }
+        /// <summary>
+        /// gére la demande de suppression
+        /// </summary>
+        /// <param name="unObjet">soit de type Personnel ou Absences</param>
         public void Supprimer(object unObjet)
         {
             if (unObjet is Personnel)
@@ -97,7 +107,6 @@ namespace AP2_MediaTek86.controleur
                 AccesDonnees.SupprimerAbsence((Absences)unObjet);
             }
         }
-        
         /// <summary>
         /// récupère la chaine d'authentification de la base de données et la compare avec les informations saisies
         /// </summary>
@@ -118,6 +127,10 @@ namespace AP2_MediaTek86.controleur
             }
             
         }
+        /// <summary>
+        /// permet de créer l'acces au formulaire des absences avec le personnel envoyé
+        /// </summary>
+        /// <param name="unPersonnel">le personnel ayant de absences</param>
         public void AccesAuFrmAbsences(Personnel unPersonnel)
         {
             frmPersonnel.Visible = false;
@@ -125,6 +138,9 @@ namespace AP2_MediaTek86.controleur
             frmAbsences.ShowDialog();
 
         }
+        /// <summary>
+        /// permet de retourner au formulaire du personnel
+        /// </summary>
         public void AccesAuFrmPersonnel()
         {
             frmAbsences.Dispose();
@@ -133,7 +149,7 @@ namespace AP2_MediaTek86.controleur
         /// <summary>
         /// fonction permettant de hacher en 256 en chaine
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">texte devant être Haché</param>
         /// <returns>la chaine hachée</returns>
         internal static string GetStringSha256Hash(string text)
         {

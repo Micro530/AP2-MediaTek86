@@ -92,7 +92,7 @@ namespace AP2_MediaTek86.vue
             this.Controls.Add(this.txtIdentifiant);
             this.Controls.Add(this.label1);
             this.Name = "FrmConnexion";
-            this.Text = "FrmConnexion";
+            this.Text = "Authentification";
             this.ResumeLayout(false);
             this.PerformLayout();
 

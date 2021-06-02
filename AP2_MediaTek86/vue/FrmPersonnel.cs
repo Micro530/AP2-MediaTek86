@@ -1,21 +1,23 @@
 ﻿using AP2_MediaTek86.controleur;
 using AP2_MediaTek86.model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AP2_MediaTek86.vue
 {
     public partial class FrmPersonnel : Form
     {
+        /// <summary>
+        /// instance de controle permettant de communiquer avec lui
+        /// </summary>
         Controle controle;
+        /// <summary>
+        /// permet de mémoriser les personnels
+        /// </summary>
         BindingSource bdsLesPersonnels = new BindingSource();
+        /// <summary>
+        /// permet de mémoriser les services
+        /// </summary>
         BindingSource bdsLesServices = new BindingSource();
         /// <summary>
         /// le constructeur valorisant controle et initialise le formulaire
@@ -58,12 +60,13 @@ namespace AP2_MediaTek86.vue
         /// <summary>
         /// permet d'activer la zone d'ajout/modification
         /// </summary>
-        /// <param name="txt"></param>
+        /// <param name="txt">texte de la zone ajouter ou modifier</param>
         private void ActiveZoneAjouter(string txt)
         {
             zoneAjout.Text = txt;
             zoneAjout.Visible = true;
             zonePers.Enabled = false;
+            comboService.SelectedIndex = 0;
         }
         /// <summary>
         /// permet de desectiver la zone d'aout/modification
@@ -113,8 +116,9 @@ namespace AP2_MediaTek86.vue
                         break;
                     case "Modifier un membre du personnel":
                         int idPersonnel = (int)dgvPersonnel.CurrentRow.Cells["idPersonnel"].Value;
-                        controle.Modifier(new Personnel(idPersonnel, txtNom.Text, txtPrenom.Text, txtTel.Text, txtMail.Text, unService.IdService, unService.Libelle));
-                        zonePers.Enabled = true;
+                        if (MessageBox.Show("Voulez-vous vraiment modifier le personnel " + dgvPersonnel.CurrentRow.Cells["nom"].Value + " " + dgvPersonnel.CurrentRow.Cells["prenom"].Value + " ?", "Confirmation de modifiation",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            controle.Modifier(new Personnel(idPersonnel, txtNom.Text, txtPrenom.Text, txtTel.Text, txtMail.Text, unService.IdService, unService.Libelle));
                         break;
                 }
                 ResetFormulaire();
@@ -159,7 +163,11 @@ namespace AP2_MediaTek86.vue
                 return true;
             }
         }
-
+        /// <summary>
+        /// evenement du bouton supprimer, supprime l'objet selectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSup_Click(object sender, EventArgs e)
         {
             if(selectionDgv("Vous devez selectionner un membre du personel avant de pouvoir le supprimer", "Aucun personnel selectionné"))
@@ -173,7 +181,11 @@ namespace AP2_MediaTek86.vue
                 }
             }
         }
-
+        /// <summary>
+        /// permet d'acces aux absences du personnel selectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAbsence_Click(object sender, EventArgs e)
         {
             if (selectionDgv("Vous devez selectionner un membre du personel avant de pouvoir gerer ses absences", "Aucun personnel selectionné"))

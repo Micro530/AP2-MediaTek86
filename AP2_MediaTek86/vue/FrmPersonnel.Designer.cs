@@ -245,7 +245,7 @@ namespace AP2_MediaTek86.vue
             this.Controls.Add(this.zoneAjout);
             this.Controls.Add(this.zonePers);
             this.Name = "FrmPersonnel";
-            this.Text = "Form1";
+            this.Text = "Gestion du personnel";
             this.zoneAjout.ResumeLayout(false);
             this.zoneAjout.PerformLayout();
             this.zonePers.ResumeLayout(false);
