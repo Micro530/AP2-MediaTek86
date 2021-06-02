@@ -41,12 +41,12 @@ namespace AP2_MediaTek86.vue
             this.comboMotif = new System.Windows.Forms.ComboBox();
             this.dgvAbsences = new System.Windows.Forms.DataGridView();
             this.zoneAjout = new System.Windows.Forms.GroupBox();
-            this.zonePers = new System.Windows.Forms.GroupBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.calendrierFin = new System.Windows.Forms.DateTimePicker();
+            this.calendrierDebut = new System.Windows.Forms.DateTimePicker();
+            this.zoneAbsence = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbsences)).BeginInit();
             this.zoneAjout.SuspendLayout();
-            this.zonePers.SuspendLayout();
+            this.zoneAbsence.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnRetourPersonnel
@@ -57,6 +57,7 @@ namespace AP2_MediaTek86.vue
             this.btnRetourPersonnel.TabIndex = 4;
             this.btnRetourPersonnel.Text = "Retour aux personnels";
             this.btnRetourPersonnel.UseVisualStyleBackColor = true;
+            this.btnRetourPersonnel.Click += new System.EventHandler(this.btnRetourPersonnel_Click);
             // 
             // btnModifier
             // 
@@ -66,6 +67,7 @@ namespace AP2_MediaTek86.vue
             this.btnModifier.TabIndex = 1;
             this.btnModifier.Text = "Modifier";
             this.btnModifier.UseVisualStyleBackColor = true;
+            this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
             // 
             // btnZ2Annuler
             // 
@@ -75,6 +77,7 @@ namespace AP2_MediaTek86.vue
             this.btnZ2Annuler.TabIndex = 10;
             this.btnZ2Annuler.Text = "Annuler";
             this.btnZ2Annuler.UseVisualStyleBackColor = true;
+            this.btnZ2Annuler.Click += new System.EventHandler(this.btnZ2Annuler_Click);
             // 
             // btnZ2Enregistrer
             // 
@@ -84,6 +87,7 @@ namespace AP2_MediaTek86.vue
             this.btnZ2Enregistrer.TabIndex = 4;
             this.btnZ2Enregistrer.Text = "Enregistrer";
             this.btnZ2Enregistrer.UseVisualStyleBackColor = true;
+            this.btnZ2Enregistrer.Click += new System.EventHandler(this.btnZ2Enregistrer_Click);
             // 
             // label5
             // 
@@ -120,6 +124,7 @@ namespace AP2_MediaTek86.vue
             this.btsAjouter.TabIndex = 3;
             this.btsAjouter.Text = "Ajouter";
             this.btsAjouter.UseVisualStyleBackColor = true;
+            this.btsAjouter.Click += new System.EventHandler(this.btsAjouter_Click);
             // 
             // btnSup
             // 
@@ -129,6 +134,7 @@ namespace AP2_MediaTek86.vue
             this.btnSup.TabIndex = 2;
             this.btnSup.Text = "Supprimer";
             this.btnSup.UseVisualStyleBackColor = true;
+            this.btnSup.Click += new System.EventHandler(this.btnSup_Click);
             // 
             // comboMotif
             // 
@@ -148,8 +154,8 @@ namespace AP2_MediaTek86.vue
             // 
             // zoneAjout
             // 
-            this.zoneAjout.Controls.Add(this.dateTimePicker2);
-            this.zoneAjout.Controls.Add(this.dateTimePicker1);
+            this.zoneAjout.Controls.Add(this.calendrierFin);
+            this.zoneAjout.Controls.Add(this.calendrierDebut);
             this.zoneAjout.Controls.Add(this.btnZ2Annuler);
             this.zoneAjout.Controls.Add(this.btnZ2Enregistrer);
             this.zoneAjout.Controls.Add(this.label5);
@@ -162,35 +168,34 @@ namespace AP2_MediaTek86.vue
             this.zoneAjout.TabIndex = 8;
             this.zoneAjout.TabStop = false;
             this.zoneAjout.Text = "Ajouter une Absence";
-            this.zoneAjout.Enter += new System.EventHandler(this.zoneAjout_Enter);
             // 
-            // zonePers
+            // calendrierFin
             // 
-            this.zonePers.Controls.Add(this.btnRetourPersonnel);
-            this.zonePers.Controls.Add(this.btsAjouter);
-            this.zonePers.Controls.Add(this.btnSup);
-            this.zonePers.Controls.Add(this.btnModifier);
-            this.zonePers.Controls.Add(this.dgvAbsences);
-            this.zonePers.Location = new System.Drawing.Point(2, 1);
-            this.zonePers.Name = "zonePers";
-            this.zonePers.Size = new System.Drawing.Size(632, 247);
-            this.zonePers.TabIndex = 7;
-            this.zonePers.TabStop = false;
-            this.zonePers.Text = "Absences du personnel";
+            this.calendrierFin.Location = new System.Drawing.Point(399, 48);
+            this.calendrierFin.Name = "calendrierFin";
+            this.calendrierFin.Size = new System.Drawing.Size(200, 20);
+            this.calendrierFin.TabIndex = 13;
             // 
-            // dateTimePicker1
+            // calendrierDebut
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(97, 48);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 12;
+            this.calendrierDebut.Location = new System.Drawing.Point(97, 48);
+            this.calendrierDebut.Name = "calendrierDebut";
+            this.calendrierDebut.Size = new System.Drawing.Size(200, 20);
+            this.calendrierDebut.TabIndex = 12;
             // 
-            // dateTimePicker2
+            // zoneAbsence
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(399, 48);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker2.TabIndex = 13;
+            this.zoneAbsence.Controls.Add(this.btnRetourPersonnel);
+            this.zoneAbsence.Controls.Add(this.btsAjouter);
+            this.zoneAbsence.Controls.Add(this.btnSup);
+            this.zoneAbsence.Controls.Add(this.btnModifier);
+            this.zoneAbsence.Controls.Add(this.dgvAbsences);
+            this.zoneAbsence.Location = new System.Drawing.Point(2, 1);
+            this.zoneAbsence.Name = "zoneAbsence";
+            this.zoneAbsence.Size = new System.Drawing.Size(632, 247);
+            this.zoneAbsence.TabIndex = 7;
+            this.zoneAbsence.TabStop = false;
+            this.zoneAbsence.Text = "Absences du personnel";
             // 
             // FrmAbsences
             // 
@@ -198,13 +203,13 @@ namespace AP2_MediaTek86.vue
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 404);
             this.Controls.Add(this.zoneAjout);
-            this.Controls.Add(this.zonePers);
+            this.Controls.Add(this.zoneAbsence);
             this.Name = "FrmAbsences";
             this.Text = "FrmAbsences";
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbsences)).EndInit();
             this.zoneAjout.ResumeLayout(false);
             this.zoneAjout.PerformLayout();
-            this.zonePers.ResumeLayout(false);
+            this.zoneAbsence.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -223,8 +228,8 @@ namespace AP2_MediaTek86.vue
         private System.Windows.Forms.ComboBox comboMotif;
         private System.Windows.Forms.DataGridView dgvAbsences;
         private System.Windows.Forms.GroupBox zoneAjout;
-        private System.Windows.Forms.GroupBox zonePers;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.GroupBox zoneAbsence;
+        private System.Windows.Forms.DateTimePicker calendrierDebut;
+        private System.Windows.Forms.DateTimePicker calendrierFin;
     }
 }

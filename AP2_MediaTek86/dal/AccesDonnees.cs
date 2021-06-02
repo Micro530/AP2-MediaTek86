@@ -56,6 +56,21 @@ namespace AP2_MediaTek86.dal
             bdd.close();
             return lesPersonnels;
         }
+        public static List<Absences> GetLesAbsences(Personnel unPersonnel)
+        {
+            List<Absences> lesAbsences = new List<Absences>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@idpersonnel", unPersonnel.IdPersonnel);
+            bdd.ReqSelect("SELECT * from absence inner join motif on absence.idmotif = motif.idmotif where idpersonnel = @idpersonnel order by datedebut desc;", parameters);
+            while (bdd.Read())
+            {
+                lesAbsences.Add(new Absences((int)bdd.Field("idpersonnel"), (DateTime)bdd.Field("datedebut"), (DateTime)bdd.Field("datefin"),
+                    (int)bdd.Field("idmotif"), (string)bdd.Field("libelle")));
+            }
+            bdd.close();
+            return lesAbsences;
+        }
         /// <summary>
         /// gere la récupération dela liste des services
         /// </summary>
@@ -72,6 +87,19 @@ namespace AP2_MediaTek86.dal
             }
             bdd.close();
             return lesServices;
+        }
+        public static List<Motif> GetLesMotif()
+        {
+            List<Motif> lesMotifs = new List<Motif>();
+            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            bdd.ReqSelect("SELECT * from motif order by libelle;", parameters);
+            while (bdd.Read())
+            {
+                lesMotifs.Add(new Motif((int)bdd.Field("idmotif"), (string)bdd.Field("libelle")));
+            }
+            bdd.close();
+            return lesMotifs;
         }
         /// <summary>
         /// Ajoute un personnel
@@ -98,9 +126,9 @@ namespace AP2_MediaTek86.dal
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
             parameters.Add("@datedebut", uneAbsence.DateDebut);
-            parameters.Add("@motif", uneAbsence.IdMotif);
+            parameters.Add("@idmotif", uneAbsence.IdMotif);
             parameters.Add("@datefin", uneAbsence.DateFin);
-            bdd.reqUpdate("insert into absence (idpersonnel,datedebut,motif,datefin) VALUES (@idpersonnel, @datedebut, @motif, @datefin);", parameters);
+            bdd.reqUpdate("insert into absence (idpersonnel,datedebut,idmotif,datefin) VALUES (@idpersonnel, @datedebut, @idmotif, @datefin);", parameters);
         }
         public static void ModifierPersonnel(Personnel unePersonne)
         {
@@ -123,7 +151,7 @@ namespace AP2_MediaTek86.dal
             parameters.Add("@datedebut", uneAbsence.DateDebut);
             parameters.Add("@idmotif", uneAbsence.IdMotif);
             parameters.Add("@datefin", uneAbsence.DateFin);
-            bdd.reqUpdate("update personnel set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+            bdd.reqUpdate("update absence set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
             bdd.close();
         }
         public static void SupprimerPersonnel(Personnel unePersonne)
@@ -139,7 +167,7 @@ namespace AP2_MediaTek86.dal
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@idpersonnel", uneAbsence.IdPersonnel);
             parameters.Add("@datedebut", uneAbsence.DateDebut);
-            bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
+            bdd.reqUpdate("delete from absence where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
         }
         /**
         // Récupère et retourne les profils provenant de la BDD
