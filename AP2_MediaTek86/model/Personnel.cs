@@ -43,7 +43,7 @@
         /// <summary>
         /// Constructeur de la class personnel valorisant les propriétés privées
         /// </summary>
-        /// <param name="idPersonnel">l'id unique de chaque menbre du personnel</param>
+        /// <param name="idPersonnel">l'id unique de chaque menbres du personnel</param>
         /// <param name="nom">son nom</param>
         /// <param name="prenom">son prénom</param>
         /// <param name="tel">son numero de téléphone</param>
