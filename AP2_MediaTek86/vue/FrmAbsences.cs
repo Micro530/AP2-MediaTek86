@@ -63,6 +63,9 @@ namespace AP2_MediaTek86.vue
             zoneAjout.Text = txt;
             zoneAjout.Visible = true;
             zoneAbsence.Enabled = false;
+            calendrierDebut.Value = DateTime.Now;
+            calendrierFin.Value = DateTime.Now;
+            comboMotif.SelectedIndex = -1;
         }
         /// <summary>
         /// permet de desectiver la zone d'aout/modification
@@ -91,7 +94,7 @@ namespace AP2_MediaTek86.vue
 
         private void btnModifier_Click(object sender, EventArgs e)
         {
-            if (selectionDev("Vous devez selectionner un membre du personel avant de pouvoir le modifier", "Aucun personnel selectionné"))
+            if (selectionDgv("Vous devez selectionner une absence avant de pouvoir la modifier", "Aucune absence selectionnée"))
             {
                 ActiveZoneAjouter("Modifier une absence");
                 calendrierDebut.Value = (DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value;
@@ -99,9 +102,9 @@ namespace AP2_MediaTek86.vue
                 comboMotif.SelectedIndex = comboMotif.FindStringExact((string)dgvAbsences.CurrentRow.Cells["motif"].Value);
             }
         }
-        private bool selectionDev(String msg1, String msg2)
+        private bool selectionDgv(String msg1, String msg2)
         {
-            if (dgvAbsences.CurrentRow.Index.Equals(-1))
+            if (dgvAbsences.CurrentRow is null || dgvAbsences.CurrentRow.Index.Equals(-1))
             {
                 MessageBox.Show(msg1, msg2, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
@@ -111,33 +114,38 @@ namespace AP2_MediaTek86.vue
                 return true;
             }
         }
+        /// <summary>
+        /// évènement enregistrer un ajout ou une modification
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnZ2Enregistrer_Click(object sender, EventArgs e)
         {
-            if (!comboMotif.SelectedIndex.Equals(-1) || calendrierDebut.Value > calendrierFin.Value )
+            if (!(comboMotif.SelectedIndex.Equals(-1) || DateTime.Compare(calendrierDebut.Value, calendrierFin.Value).Equals(1)) )
             {
-                DateTime datedebut = (DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value;
-                DateTime datedefin = (DateTime)dgvAbsences.CurrentRow.Cells["datefin"].Value;
-                if (MessageBox.Show("Voulez-vous vraiment modifier l'absence du" + datedebut + " au " + datedefin + " ?", "Confirmation de modifiation", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                Motif unMotif = (Motif)bdsLesMotifs.List[bdsLesMotifs.Position];
+                switch (zoneAjout.Text)
                 {
-                    Motif unMotif = (Motif)bdsLesMotifs.List[bdsLesMotifs.Position];
-                    switch (zoneAjout.Text)
-                    {
-                        case "Ajouter une absence":
-                            controle.Ajouter(new Absences(unPersonnel.IdPersonnel, calendrierDebut.Value, calendrierFin.Value, unMotif.IdMotif, unMotif.Libelle));
-                            break;
-                        case "Modifier une absence":
-                            if (calendrierDebut.Value.Equals((DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value))
+                    case "Ajouter une absence":
+                        controle.Ajouter(new Absences(unPersonnel.IdPersonnel, calendrierDebut.Value, calendrierFin.Value, unMotif.IdMotif, unMotif.Libelle));
+                        break;
+                    case "Modifier une absence":
+                        if (calendrierDebut.Value.Equals((DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value))
+                        {
+                            DateTime datedebut = (DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value;
+                            DateTime datedefin = (DateTime)dgvAbsences.CurrentRow.Cells["datefin"].Value;
+                            if (MessageBox.Show("Voulez-vous vraiment modifier l'absence du" + datedebut + " au " + datedefin + " ?", "Confirmation de modifiation",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                             {
                                 controle.Modifier(new Absences(unPersonnel.IdPersonnel, datedebut, calendrierFin.Value, unMotif.IdMotif, unMotif.Libelle));
                             }
-                            else
-                            {
-                                modificationDateCle();
-                            }
-                            break;
-                    }
-                    ResetFormulaire();
+                        }
+                        else
+                        {
+                            modificationDateCle();
+                        }
+                        break;
+                        ResetFormulaire();
                 }
             }
             else
@@ -145,6 +153,9 @@ namespace AP2_MediaTek86.vue
                 MessageBox.Show("Vous n'avez pas sélectionné de motif ou bien les dates ne sont pas cohérente", "Champ(s) vide(s)", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+        /// <summary>
+        /// evenement si la modification change la date de début
+        /// </summary>
         private void modificationDateCle()
         {
             controle.Supprimer((Absences)bdsLesAbsences.List[bdsLesAbsences.Position]);
@@ -163,7 +174,16 @@ namespace AP2_MediaTek86.vue
 
         private void btnSup_Click(object sender, EventArgs e)
         {
-
+            if(selectionDgv("Vous devez selectionner une absence avant de pouvoir la supprimer", "Aucune absence selectionnée"))
+            {
+                DateTime datedebut = (DateTime)dgvAbsences.CurrentRow.Cells["datedebut"].Value;
+                DateTime datedefin = (DateTime)dgvAbsences.CurrentRow.Cells["datefin"].Value;
+                if (MessageBox.Show("Voulez-vous vraiment supprimer l'absence du" + datedebut + " au " + datedefin + " ?", "Confirmation de suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    controle.Supprimer((Absences)bdsLesAbsences.List[bdsLesAbsences.Position]);
+                    ResetFormulaire();
+                }
+            }       
         }
     }
 }
