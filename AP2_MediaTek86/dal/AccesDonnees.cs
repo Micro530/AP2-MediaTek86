@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using AP2_MediaTek86.connexion;
 using AP2_MediaTek86.model;
 
@@ -56,6 +52,11 @@ namespace AP2_MediaTek86.dal
             bdd.close();
             return lesPersonnels;
         }
+        /// <summary>
+        /// Gere la récupération de la liste des absences
+        /// </summary>
+        /// <param name="unPersonnel">recoie le personnel ayant des absences</param>
+        /// <returns>la liste de ses absences</returns>
         public static List<Absences> GetLesAbsences(Personnel unPersonnel)
         {
             List<Absences> lesAbsences = new List<Absences>();
@@ -88,6 +89,10 @@ namespace AP2_MediaTek86.dal
             bdd.close();
             return lesServices;
         }
+        /// <summary>
+        /// gere la récupération dela liste des motif
+        /// </summary>
+        /// <returns>la liste des motif</returns>
         public static List<Motif> GetLesMotif()
         {
             List<Motif> lesMotifs = new List<Motif>();
@@ -130,6 +135,10 @@ namespace AP2_MediaTek86.dal
             parameters.Add("@datefin", uneAbsence.DateFin);
             bdd.reqUpdate("insert into absence (idpersonnel,datedebut,idmotif,datefin) VALUES (@idpersonnel, @datedebut, @idmotif, @datefin);", parameters);
         }
+        /// <summary>
+        /// permet de modifier le personnel envoyé
+        /// </summary>
+        /// <param name="unePersonne">le personnel à modifier</param>
         public static void ModifierPersonnel(Personnel unePersonne)
         {
             ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
@@ -143,6 +152,10 @@ namespace AP2_MediaTek86.dal
             bdd.reqUpdate("update personnel set nom = @nom, prenom = @prenom, tel = @tel, mail = @mail, idservice = @idservice where idpersonnel = @idpersonnel;", parameters);
             bdd.close();
         }
+        /// <summary>
+        /// permet de modifier l'absence envoyé
+        /// </summary>
+        /// <param name="uneAbsence">modifie l'absence recu</param>
         public static void ModifierAbsence(Absences uneAbsence)
         {
             ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
@@ -154,6 +167,10 @@ namespace AP2_MediaTek86.dal
             bdd.reqUpdate("update absence set datedebut = @datedebut, idmotif = @idmotif, datefin = @datefin where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
             bdd.close();
         }
+        /// <summary>
+        ///supprime la personne recu en paramètre 
+        /// </summary>
+        /// <param name="unePersonne">la personne à supprimer</param>
         public static void SupprimerPersonnel(Personnel unePersonne)
         {
             ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
@@ -161,6 +178,10 @@ namespace AP2_MediaTek86.dal
             parameters.Add("@idpersonnel", unePersonne.IdPersonnel);
             bdd.reqUpdate("delete from personnel where idpersonnel = @idpersonnel;", parameters);
         }
+        /// <summary>
+        /// supprime l'absence recu en paramètre
+        /// </summary>
+        /// <param name="uneAbsence">l'absence à supprimer</param>
         public static void SupprimerAbsence(Absences uneAbsence)
         {
             ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
@@ -169,74 +190,5 @@ namespace AP2_MediaTek86.dal
             parameters.Add("@datedebut", uneAbsence.DateDebut);
             bdd.reqUpdate("delete from absence where idpersonnel = @idpersonnel and datedebut = @datedebut;", parameters);
         }
-        /**
-        // Récupère et retourne les profils provenant de la BDD
-        public static List<Profil> GetLesProfils()
-        {
-            List<Profil> lesProfils = new List<Profil>();
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            bdd.ReqSelect("SELECT * from profil order by nom;", parameters);
-            while (bdd.Read())
-            {
-                lesProfils.Add(new Profil(int.Parse(bdd.Field("idprofil").ToString()), bdd.Field("nom").ToString()));
-
-            }
-            bdd.close();
-            return lesProfils;
-
-
-        }
-        // Suppression d'un développeur
-        public static void DelDepveloppeur(Developpeur developpeur)
-        {
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-            bdd.reqUpdate("delete from developpeur where iddeveloppeur = @iddeveloppeur;", parameters);
-        }
-        // Ajoute un développeur
-        
-
-        // Modification d'un développeur
-        
-        // Demande de modification du pwd
-        public static void UpdatePwd(Developpeur developpeur)
-        {
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@iddeveloppeur", developpeur.Iddeveloppeur);
-            parameters.Add("@pwd", GetStringSha256Hash(developpeur.Pwd));
-            bdd.reqUpdate("update developpeur set pwd = @pwd where iddeveloppeur = @iddeveloppeur;", parameters);
-            bdd.close();
-        }
-        public static bool Authentification(String nom, String prenom, String pwd)
-        {
-            ConnexionBDD bdd = ConnexionBDD.getInstance(connectionString);
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@nomDev", nom);
-            parameters.Add("@prenomDev", prenom);
-            parameters.Add("@pwdDev", GetStringSha256Hash(pwd));
-            bdd.ReqSelect("SELECT * from developpeur inner join profil on developpeur.idprofil = profil.idprofil " +
-                "where developpeur.nom = @nomDev and prenom = @prenomDev and pwd = @pwdDev and profil.nom = 'admin';", parameters);
-            bool temp = bdd.Read();
-            bdd.close();
-            return temp;
-
-        }
-        /// Transformation d'une chaîne avec SHA256 (pour le pwd)
-        internal static string GetStringSha256Hash(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                return string.Empty;
-            using (var sha = new System.Security.Cryptography.SHA256Managed())
-            {
-                byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);
-                byte[] hash = sha.ComputeHash(textData);
-                return BitConverter.ToString(hash).Replace("-", string.Empty);
-            }
-        }
-        **/
     }
-       
 }

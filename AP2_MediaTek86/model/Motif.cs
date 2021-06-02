@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AP2_MediaTek86.model
+﻿namespace AP2_MediaTek86.model
 {
     public class Motif
     {
         /// <summary>
-        /// Propriétés de la table motif 
+        /// id du motif
         /// </summary>
         private int idMotif;
+        /// <summary>
+        /// libellé du motif
+        /// </summary>
         private string libelle;
-
+        /// <summary>
+        /// génération de l'encapsulation
+        /// </summary>
         public int IdMotif { get => idMotif; set => idMotif = value; }
         public string Libelle { get => libelle; set => libelle = value; }
         /// <summary>

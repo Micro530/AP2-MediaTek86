@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AP2_MediaTek86.model
+﻿namespace AP2_MediaTek86.model
 {
     public class Service
     {
         /// <summary>
-        /// Propriétés de la table service 
+        /// id su service
         /// </summary>
         private int idService;
+        /// <summary>
+        /// libelle du service
+        /// </summary>
         private string libelle;
-
+        /// <summary>
+        /// génération de l'encapsulation
+        /// </summary>
         public int IdService { get => idService; set => idService = value; }
         public string Libelle { get => libelle; set => libelle = value; }
         /// <summary>

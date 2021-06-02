@@ -1,22 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AP2_MediaTek86.model
 {
     public class Absences
     {
         /// <summary>
-        /// les propriétés de la table absences
+        /// idpersonnel
         /// </summary>
         private int idPersonnel;
+        /// <summary>
+        /// la date de debut
+        /// </summary>
         private DateTime dateDebut;
+        /// <summary>
+        /// la date de fin
+        /// </summary>
         private DateTime dateFin;
+        /// <summary>
+        /// id du motif
+        /// </summary>
         private int idMotif;
+        /// <summary>
+        /// le libelle du motif
+        /// </summary>
         private string motif;
-
+        /// <summary>
+        /// génération de l'encapsulation
+        /// </summary>
         public int IdPersonnel { get => idPersonnel; set => idPersonnel = value; }
         public DateTime DateDebut { get => dateDebut; set => dateDebut = value; }
         public DateTime DateFin { get => dateFin; set => dateFin = value; }
