@@ -30,7 +30,7 @@ namespace AP2_MediaTek86.vue
             ResetFormulaire();
         }
         /// <summary>
-        /// Permet de mettre ou remettre le formulaire à l'été d'origine
+        /// Permet de mettre ou remettre le formulaire à l'état d'origine
         /// </summary>
         private void ResetFormulaire()
         {
